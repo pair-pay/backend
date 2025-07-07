@@ -1,0 +1,4 @@
+export const SPLIT_TYPES = {
+  EQUAL: 'EQUAL',
+  PERCENTAGE: 'PERCENTAGE',
+};

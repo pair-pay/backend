@@ -1,0 +1,82 @@
+version: '3.8'
+name: pair-pay-stack
+
+services:
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: pair-pay-app
+  #   hostname: pair-pay-app
+  #   restart: unless-stopped
+  #   ports:
+  #     - '3000:3000'
+  #   environment:
+  #     - NODE_ENV=production
+  #     - PORT=${PORT}
+  #     - DATABASE_DRIVER=type-orm
+  #     - CACHE_DRIVER=redis
+  #     - API_URL=${API_URL}
+  #     - API_KEY=${API_KEY}
+  #     - POSTGRES_HOST=bizaway-database
+  #     - POSTGRES_PORT=${POSTGRES_PORT}
+  #     - POSTGRES_USER=${POSTGRES_USER}
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  #     - POSTGRES_DB=${POSTGRES_DB}
+  #     - TYPE_ORM_AUTO_LOAD_ENTITIES=true
+  #     - TYPE_ORM_SYNCHRONIZE=true
+  #     - REDIS_HOST=bizaway-cache
+  #     - REDIS_PORT=${REDIS_PORT}
+  #     - REDIS_PASSWORD=${REDIS_PASSWORD}
+  #     - REDIS_USERNAME=${REDIS_USERNAME}
+  #     - REDIS_TTL=${REDIS_TTL}
+  #   volumes:
+  #     - app-data:/usr/src/app
+  #   networks:
+  #     - pair-pay-network
+  #   depends_on:
+  #     - database
+  #     - cache
+
+  database:
+    image: postgres
+    container_name: pair-pay-database
+    hostname: pair-pay-database
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - pair-pay-network
+
+  cache:
+    image: redis
+    container_name: pair-pay-cache
+    hostname: pair-pay-cache
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_USERNAME: ${REDIS_USERNAME}
+    networks:
+      - pair-pay-network
+    volumes:
+      - redis-data:/data
+
+networks:
+  pair-pay-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  app-data:
+    driver: local
