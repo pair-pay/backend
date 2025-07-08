@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUUID,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -20,4 +21,10 @@ export class CreateGroupDto {
   @IsOptional()
   @MaxLength(255)
   description: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsUUID()
+  @IsOptional()
+  createdByUserId?: string;
 }
